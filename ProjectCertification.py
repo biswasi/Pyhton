@@ -4,7 +4,7 @@ Created on Thu Jul  4 02:54:14 2024
 """
 
 #Q1: Create a python script called googlesearch that provides a command line utility to
- #perform google search. It gives you the top links (search results) of whatever you want to           search on google.
+ #perform google search. It gives you the top links (search results) of whatever you want to search Google
 
 from googlesearch import search  
 print("Enter what you want to search in Google: :") 
