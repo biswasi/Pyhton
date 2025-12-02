@@ -1,0 +1,56 @@
+import json
+import boto3
+import time
+
+# Initialize S3 client
+s3 = boto3.client('s3')
+
+def lambda_handler(event, context):
+
+    print("Received event:", json.dumps(event, indent=2))
+
+    # Extract bucket and file details
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    input_key = event['Records'][0]['s3']['object']['key']
+
+    print(f"Attempting to fetch file: {input_key} from bucket: {bucket_name}")
+
+    # Ensure it's a text file
+    if not input_key.endswith(".txt"):
+        print(f"Skipping non-text file: {input_key}")
+        return
+    
+    # Define output file path
+    output_key = input_key.replace("input/", "output/")
+    
+    # Wait briefly to ensure file availability
+    time.sleep(2)
+
+    try:
+        # Read the file from S3
+        response = s3.get_object(Bucket=bucket_name, Key=input_key)
+        file_content = response['Body'].read().decode('utf-8')
+
+        # Convert text to uppercase
+        modified_content = file_content.upper()
+
+        # Save the transformed file to the output folder
+        s3.put_object(
+            Bucket=bucket_name,
+            Key=output_key,
+            Body=modified_content.encode('utf-8')
+        )
+
+        print(f"File processed and saved to {output_key}")
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps(f'File processed and saved to {output_key}')
+        }
+
+    except s3.exceptions.NoSuchKey as e:
+        print(f"Error: File {input_key} not found in bucket {bucket_name}.")
+        return {
+            'statusCode': 404,
+            'body': json.dumps(f"Error: File {input_key} not found in bucket {bucket_name}.")
+        }
