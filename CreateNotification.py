@@ -6,15 +6,15 @@ def lambda_handler(event, context):
    Topic_ARN = "arn:aws:sns:us-east-1:166607322176:ReminderTopic"
    response_one = client.publish (
       TargetArn = Topic_ARN,
-      Message = json.dumps({'Reminder-Type': "Weekly Reminder", 'Reminder': "Reminder 1", 'Destination': "Email" }),
+      Message = json.dumps({'Reminder-Type': "Weekly Reminder", 'Reminder': "Reminder 1 for email", 'Destination': "Email" }),
    )
    response_two = client.publish (
       TargetArn = Topic_ARN,
-      Message = json.dumps({'Reminder-Type': "Weekly Reminder", 'Reminder': "Reminder 2", 'Destination': "Email"}),
+      Message = json.dumps({'Reminder-Type': "Weekly Reminder", 'Reminder': "Reminder 2 for email", 'Destination': "Email"}),
    )
    response_three = client.publish (
       TargetArn = Topic_ARN,
-      Message = json.dumps({'Reminder-Type': "Daily Reminder", 'Reminder': "Reminder 3", 'Destination': "SQS"}),
+      Message = json.dumps({'Reminder-Type': "Daily Reminder", 'Reminder': "Reminder 3 from IB", 'Destination': "SQS"}),
    )
    return {
       'statusCode': 200,
