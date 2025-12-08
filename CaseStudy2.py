@@ -1,0 +1,56 @@
+# Case Study 2 Loan approval System submitted by IB
+import csv
+
+csv_data = []
+
+with open("files/bank-data.csv") as file:
+     reader = csv.DictReader(file)
+     csv_data = [r for r in reader]
+    
+# Max and Min age for loan eligibility    
+ages =   list([float(data['age']) for data in csv_data] )
+
+# Dictionary of max min ages
+max_min_age = {"max" : max(ages), "min" : min(ages) }
+
+print("Max age for loan eligibility " + str(max_min_age['max']))
+print("Max age for loan eligibility " + str(max_min_age['min']))
+    # Unique Jobs
+unique_jobs = set([data['job'].lower() for data in csv_data])
+print("Unique jobs list :")
+print(unique_jobs)
+
+print("* Bank of Portugal Portal .** Check your eligibility for loan*")
+
+# While loop to check profession without ending except user ends
+while True:
+    user_input = input("Enter END/end to quit else continue>> ")
+
+    if user_input.lower() != "end":
+        print("Enter the profession :")
+        client_profession = input(">> ").strip()
+
+        # Profession check with case insensitive by making it lower/upper
+        if client_profession.lower() in unique_jobs:
+            print("Ok,Given profession exists in list")
+            print("\n")
+            print(
+                "Please enter the details whether you are eligible or not for Loan :")
+            client_age = input("Age >> ").strip()
+            marital_status = input(
+                "Marital Status [Married/Single/Divorced] >> ").strip()
+            print("\n")
+
+            check_eligibility = set([data['y'] for data in csv_data if (int(data['age']) == int(client_age) and data['job'].lower(
+            ) == client_profession.lower() and data['marital'].lower() == marital_status.lower())])
+
+            if "yes" in check_eligibility:
+                print("Congratulations!! You are eligible for loan.")
+            else:
+                print("Sorry! You are not eligible for loan.")
+        else:
+            print("Given profession does not belong to the list")
+    else:
+        break
+
+    
